@@ -5,8 +5,30 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
+    <script src="/socket.io/socket.io.js"></script>
   </head>
   <body>
     <h1>Log in</h1>
+    <div class="login">
+      <form action="http://localhost:3000" method="post" id="form">
+        <input
+          type="text"
+          name="username"
+          placeholder="username"
+          id="username"
+        />
+        <button type="submit">login</button>
+      </form>
+    </div>
+    <script>
+      let form = document.getElementById("form");
+      let socket = io();
+      form.onsubmit = function (e) {
+        e.preventDefault();
+        socket.emit("login", {
+          username: document.getElementById("username").value,
+        });
+      };
+    </script>
   </body>
 </html>
