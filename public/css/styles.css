@@ -1,0 +1,109 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: lightblue;
+}
+
+.outter-container {
+  min-width: 100%;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.container {
+  /* this width affects the three divs inside it */
+  width: 726px;
+  height: 400px;
+  display: inherit;
+  flex-wrap: wrap;
+  align-self: center;
+  justify-content: space-between;
+}
+
+.groups,
+.chat-container,
+.commands {
+  border: 1px solid lightslategray;
+  width: 200px;
+  height: inherit;
+  background-color: floralwhite;
+  border-radius: 15px;
+}
+
+.chat-container {
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 5px;
+}
+
+.group-header {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid gray;
+  height: 10%;
+}
+
+.group-header > * {
+  display: block;
+}
+
+.group-header .group-name {
+  font-size: 100%;
+  align-self: center;
+}
+
+.group-header .users-connected {
+  align-self: center;
+  font-size: 10px;
+}
+
+.chat {
+  height: 90%;
+  padding: 5px;
+}
+
+.send-message {
+  height: 10%;
+  border-top: 1px solid gray;
+  display: flex;
+  justify-content: space-between;
+  padding-top: 3px;
+}
+
+.send-message > * {
+  display: block;
+  border-radius: 10px;
+}
+
+.send-message input {
+  width: 80%;
+  border-style: none;
+  border-bottom: 1px solid gray;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+.send-message input:focus {
+  background-color: rgb(198, 198, 198);
+  border-style: none;
+}
+
+.send-message button {
+  width: 15%;
+  border-style: none;
+  background-color: darkgray;
+  border: 2px solid gray;
+}
+
+.send-message button:hover {
+  cursor: pointer;
+  background-color: gray;
+}

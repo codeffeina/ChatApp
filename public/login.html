@@ -6,29 +6,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
     <script src="/socket.io/socket.io.js"></script>
+    <link rel="stylesheet" href="./css/styles.css" />
   </head>
   <body>
-    <h1>Log in</h1>
-    <div class="login">
-      <form action="http://localhost:3000" method="post" id="form">
-        <input
-          type="text"
-          name="username"
-          placeholder="username"
-          id="username"
-        />
-        <button type="submit">login</button>
-      </form>
+    <div class="outter-container">
+      <div class="container">
+        <div class="groups"></div>
+        <div class="chat-container">
+          <div class="group-header">
+            <h2 class="group-name">max length 20</h2>
+            <span class="users-connected">connected <b>9</b></span>
+          </div>
+          <div class="chat"></div>
+          <div class="send-message">
+            <input type="text" id="msg" placeholder="message" />
+            <button>send</button>
+          </div>
+        </div>
+        <div class="commands"></div>
+      </div>
     </div>
-    <script>
-      let form = document.getElementById("form");
-      let socket = io();
-      form.onsubmit = function (e) {
-        e.preventDefault();
-        socket.emit("login", {
-          username: document.getElementById("username").value,
-        });
-      };
-    </script>
   </body>
 </html>
