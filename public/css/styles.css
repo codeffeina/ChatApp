@@ -18,8 +18,8 @@ body {
 
 .container {
   /* this width affects the three divs inside it */
-  width: 726px;
-  height: 400px;
+  width: 1126px;
+  height: 80vh;
   display: inherit;
   flex-wrap: wrap;
   align-self: center;
@@ -30,14 +30,14 @@ body {
 .chat-container,
 .commands {
   border: 1px solid lightslategray;
-  width: 200px;
+  width: 300px;
   height: inherit;
   background-color: floralwhite;
   border-radius: 15px;
 }
 
 .chat-container {
-  width: 300px;
+  width: 500px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -48,7 +48,7 @@ body {
   display: flex;
   justify-content: space-between;
   border-bottom: 1px solid gray;
-  height: 10%;
+  height: 5%;
 }
 
 .group-header > * {
@@ -68,10 +68,23 @@ body {
 .chat {
   height: 90%;
   padding: 5px;
+  background-color: #d9d2d2;
+  overflow-y: scroll;
+}
+
+.chat .msg {
+  display: block;
+  width: 80%;
+  /* margin-left: auto; */
+  list-style: none;
+  background-color: #ededed;
+  padding: 2px;
+  border-radius: 5px;
+  margin-bottom: 10px;
 }
 
 .send-message {
-  height: 10%;
+  height: 5%;
   border-top: 1px solid gray;
   display: flex;
   justify-content: space-between;
