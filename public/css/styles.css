@@ -120,3 +120,30 @@ body {
   cursor: pointer;
   background-color: gray;
 }
+
+.commands {
+  overflow: hidden;
+}
+
+.commands h2 {
+  text-align: center;
+  border-bottom: 2px solid gray;
+  background-color: darkgray;
+}
+
+.commands ul li:nth-child(odd) {
+  background-color: rgb(224, 224, 224);
+}
+
+.commands ul li {
+  list-style: none;
+  display: block;
+  padding: 5px;
+  margin-top: 5px;
+  font-family: monospace;
+  font-size: 16px;
+}
+
+.commands ul li span {
+  font-weight: 900;
+}
