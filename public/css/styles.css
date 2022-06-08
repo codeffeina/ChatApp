@@ -105,7 +105,7 @@ body {
 }
 
 .send-message input:focus {
-  background-color: rgb(198, 198, 198);
+  background-color: rgb(231, 225, 225);
   border-style: none;
 }
 
