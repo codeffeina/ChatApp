@@ -29,6 +29,10 @@ io.on("connection", function (socket) {
   socket.on("send-message", (data) => {
     onMessage(socket, data);
   });
+
+  socket.on("createRoom", (data) => {
+    onCreateRoom(socket, data);
+  });
 });
 
 function initialConnection(socket) {
@@ -57,6 +61,20 @@ function onMessage(socket, data) {
   socket
     .to(currentRoom)
     .emit("send-message", JSON.stringify({ author: nickname, message }));
+}
+
+function onCreateRoom(socket, data) {
+  let { room } = JSON.parse(data);
+  room = room.toLowerCase();
+  if (ROOMS_INFO[room] === undefined) {
+    ROOMS_INFO[room] = 0;
+    socket.emit("roomCreated", JSON.stringify({ room }));
+  } else {
+    socket.emit(
+      "errorCreatingRoom",
+      JSON.stringify({ msg: "This room is already taken" })
+    );
+  }
 }
 
 server.listen(3000, () => {

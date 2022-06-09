@@ -13,3 +13,8 @@ socket.on("send-message", function (data) {
   li.innerHTML = `<span class="author">${data.author}</span> ${data.message}`;
   document.getElementsByClassName("chat")[0].appendChild(li);
 });
+
+socket.on("roomCreated", function (data) {
+  let { room } = JSON.parse(data);
+  console.log(room);
+});
