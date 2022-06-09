@@ -33,6 +33,10 @@ io.on("connection", function (socket) {
   socket.on("createRoom", (data) => {
     onCreateRoom(socket, data);
   });
+
+  socket.on("joinRoom", (data) => {
+    onJoinRoom(socket, data);
+  });
 });
 
 function initialConnection(socket) {
@@ -46,7 +50,7 @@ function initialConnection(socket) {
   ROOMS_INFO["lobby"]++;
   // emit event to update the home page with the new information
   socket.emit(
-    "joinedGroup",
+    "joinedRoom",
     JSON.stringify({
       nickname: USERS_INFO[socket.id].nickname,
       room: "lobby",
@@ -66,15 +70,47 @@ function onMessage(socket, data) {
 function onCreateRoom(socket, data) {
   let { room } = JSON.parse(data);
   room = room.toLowerCase();
-  if (ROOMS_INFO[room] === undefined) {
-    ROOMS_INFO[room] = 0;
-    socket.emit("roomCreated", JSON.stringify({ room }));
-  } else {
+  if (
+    ROOMS_INFO[room] !== undefined ||
+    USERS_INFO[socket.id].numberOfRoomsCreated == 3
+  ) {
     socket.emit(
       "errorCreatingRoom",
-      JSON.stringify({ msg: "This room is already taken" })
+      JSON.stringify({
+        msg: "This room is taken or you create too much rooms (max 3)",
+      })
     );
+  } else {
+    ROOMS_INFO[room] = 0;
+    USERS_INFO[socket.id].numberOfRoomsCreated++;
+    socket.emit("roomCreated", JSON.stringify({ room }));
   }
+}
+
+function onJoinRoom(socket, data) {
+  let { room } = JSON.parse(data);
+  if (ROOMS_INFO[room] == undefined) {
+    socket.emit(
+      "errorJoiningRoom",
+      JSON.stringify({ msg: "This room that's not exits!" })
+    );
+    return;
+  }
+
+  // first let's update the number of user in the current room
+  let usersConnected = --ROOMS_INFO[USERS_INFO[socket.id].currentRoom];
+  socket // emit event to inform the update
+    .to(USERS_INFO[socket.id].currentRoom)
+    .emit("leavedRoom", JSON.stringify({ users: usersConnected }));
+
+  // join the new room
+  socket.join(room);
+  // update the number of users in this room
+  let users = ++ROOMS_INFO[room];
+  // let { nickname } = USERS_INFO[socket.id];
+  // update the new room for this users
+  USERS_INFO[socket.id].currentRoom = room;
+  io.to(room).emit("joinedRoom", JSON.stringify({ room, users }));
 }
 
 server.listen(3000, () => {

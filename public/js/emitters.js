@@ -9,7 +9,13 @@ function sendMessage() {
       // TODO: implement the logic to change the nickname
       break;
     case "/joinroom":
-      // TODO: implement the logic to join a new room
+      let roomToJoin = message.split(" ")[1];
+      roomToJoin = cleanSpaces(roomToJoin);
+      if (roomToJoin.length === 0) {
+        alert("Provide a room name");
+        return;
+      }
+      socket.emit("joinRoom", JSON.stringify({ room: roomToJoin }));
       break;
     case "/createroom":
       let room = message.split(" ")[1];
@@ -34,7 +40,7 @@ function addMessage(message) {
   let li = document.createElement("li");
   li.classList.add("msg");
   li.style.marginLeft = "auto";
-  li.innerHTML = `<span class="author">${nickname}</span> ${message}`;
+  li.innerHTML = message;
   document.getElementsByClassName("chat")[0].appendChild(li);
 }
 
