@@ -13,6 +13,7 @@ const USERS_INFO = {};
 const ROOMS_INFO = {
   lobby: 0,
 };
+const NICKNAMES = [];
 let guessNumber = 0;
 
 app.use(express.urlencoded({ extended: false }));
@@ -36,6 +37,10 @@ io.on("connection", function (socket) {
 
   socket.on("joinRoom", (data) => {
     onJoinRoom(socket, data);
+  });
+
+  socket.on("newNickname", (data) => {
+    onNewNickname(socket, data);
   });
 });
 
@@ -111,6 +116,22 @@ function onJoinRoom(socket, data) {
   // update the new room for this users
   USERS_INFO[socket.id].currentRoom = room;
   io.to(room).emit("joinedRoom", JSON.stringify({ room, users }));
+}
+
+function onNewNickname(socket, data) {
+  let { nickname } = JSON.parse(data);
+  if (NICKNAMES[nickname] === undefined) {
+    socket.emit(
+      "errorChangingNickname",
+      JSON.stringify({ msg: "This nickname is already taken" })
+    );
+    return;
+  }
+  let oldNickname = USERS_INFO[socket.id].nickname;
+  USERS_INFO[socket.id].nickname = nickname;
+  socket
+    .to(USERS_INFO[socket.id].currentRoom)
+    .emit("newNickname", JSON.stringify({ nickname, oldNickname }));
 }
 
 server.listen(3000, () => {

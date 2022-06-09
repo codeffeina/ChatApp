@@ -1,12 +1,18 @@
 function sendMessage() {
   let message = document.getElementById("input-msg").value;
+  document.getElementById("input-msg").value = "";
   message = cleanSpaces(message);
   if (message.length === 0) return;
 
   let initial_piece = message.split(" ")[0];
   switch (initial_piece) {
     case "/nickname":
-      // TODO: implement the logic to change the nickname
+      nickname = cleanSpaces(message.split(" ")[1]);
+      if (nickname.length == 0) {
+        alert("Provide a nickname");
+        return;
+      }
+      socket.emit("newNickname", JSON.stringify({ nickname }));
       break;
     case "/joinroom":
       let roomToJoin = message.split(" ")[1];
