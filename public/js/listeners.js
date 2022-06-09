@@ -19,10 +19,13 @@ socket.on("leavedRoom", function (data) {
 
 socket.on("send-message", function (data) {
   data = JSON.parse(data);
+  let chatElement = document.getElementsByClassName("chat")[0];
+  console.log(chatElement.scrollHeight);
   let li = document.createElement("li");
   li.classList.add("msg");
   li.innerHTML = `<span class="author">${data.author}</span>: ${data.message}`;
-  document.getElementsByClassName("chat")[0].appendChild(li);
+  chatElement.appendChild(li);
+  chatElement.scrollTo(0, chatElement.scrollHeight);
 });
 
 socket.on("roomCreated", function (data) {
@@ -37,7 +40,11 @@ socket.on("newNickname", function (data) {
   li.classList.add("info");
   li.innerHTML = `<i>${oldNickname}</i> change its nickname to: <i>${nickname}</i>`;
   document.getElementsByClassName("chat")[0].appendChild(li);
-  // let oldMessages = document.getElementsByClassName("author")
+});
+
+socket.on("updateChatHeight", function () {
+  let chatElement = document.getElementsByClassName("chat")[0];
+  chatElement.scrollTo(0, chatElement.scrollHeight);
 });
 
 // TODO: implement logic to handle error when trying to create a new room

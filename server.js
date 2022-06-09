@@ -70,6 +70,7 @@ function onMessage(socket, data) {
   socket
     .to(currentRoom)
     .emit("send-message", JSON.stringify({ author: nickname, message }));
+  socket.emit("updateChatHeight");
 }
 
 function onCreateRoom(socket, data) {
@@ -120,7 +121,7 @@ function onJoinRoom(socket, data) {
 
 function onNewNickname(socket, data) {
   let { nickname } = JSON.parse(data);
-  if (NICKNAMES[nickname] === undefined) {
+  if (NICKNAMES.includes(nickname)) {
     socket.emit(
       "errorChangingNickname",
       JSON.stringify({ msg: "This nickname is already taken" })
@@ -128,6 +129,9 @@ function onNewNickname(socket, data) {
     return;
   }
   let oldNickname = USERS_INFO[socket.id].nickname;
+  let index = NICKNAMES.indexOf(oldNickname);
+  NICKNAMES.splice(index, 1);
+  NICKNAMES.push(nickname);
   USERS_INFO[socket.id].nickname = nickname;
   socket
     .to(USERS_INFO[socket.id].currentRoom)

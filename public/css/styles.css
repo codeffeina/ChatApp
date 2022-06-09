@@ -74,9 +74,8 @@ body {
 
 .chat .msg {
   display: block;
-  max-width: 80%;
+  max-width: 70%;
   width: auto;
-  /* margin-left: auto; */
   list-style: none;
   background-color: #ededed;
   padding: 2px;
@@ -147,4 +146,8 @@ body {
 
 .commands ul li span {
   font-weight: 900;
+}
+
+.info {
+  background-color: lightgoldenrodyellow !important;
 }
