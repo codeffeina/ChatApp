@@ -64,6 +64,7 @@ function initialConnection(socket) {
       nickname: USERS_INFO[socket.id].nickname,
       room: "lobby",
       users: ROOMS_INFO["lobby"],
+      rooms: Object.keys(ROOMS_INFO),
     })
   );
 }
@@ -93,7 +94,7 @@ function onCreateRoom(socket, data) {
   } else {
     ROOMS_INFO[room] = 0;
     USERS_INFO[socket.id].numberOfRoomsCreated++;
-    socket.emit("roomCreated", JSON.stringify({ room }));
+    io.emit("roomCreated", JSON.stringify({ room }));
   }
 }
 

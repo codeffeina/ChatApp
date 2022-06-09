@@ -36,6 +36,21 @@ body {
   border-radius: 15px;
 }
 
+.groups {
+  padding: 10px;
+}
+
+.groups h2 {
+  text-align: center;
+  border-bottom: 1px solid gray;
+}
+
+#groupNames li {
+  list-style: none;
+  letter-spacing: 2px;
+  padding-top: 5px;
+}
+
 .chat-container {
   width: 500px;
   display: flex;

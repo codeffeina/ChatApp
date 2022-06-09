@@ -8,6 +8,12 @@ socket.on("joinedRoom", function (data) {
   data = JSON.parse(data);
   document.getElementsByClassName("group-name")[0].innerHTML = data.room;
   document.getElementById("usersIn").innerText = data.users;
+  document.getElementById("groupNames").innerHTML = "";
+  for (let room of data.rooms) {
+    let li = document.createElement("li");
+    li.innerHTML = "> " + room;
+    document.getElementById("groupNames").appendChild(li);
+  }
   // nickname = nickname ? data.nickname : nickname; //TODO: remove this variable
   console.log("Joined room", data.room);
 });
@@ -30,7 +36,9 @@ socket.on("send-message", function (data) {
 
 socket.on("roomCreated", function (data) {
   let { room } = JSON.parse(data);
-  alert("new room created: " + room);
+  let li = document.createElement("li");
+  li.innerHTML = "> " + room;
+  document.getElementById("groupNames").appendChild(li);
 });
 
 socket.on("newNickname", function (data) {
