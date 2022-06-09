@@ -25,20 +25,38 @@ app.get("/", (req, res) => {
 
 io.on("connection", function (socket) {
   initialConnection(socket);
+
+  socket.on("send-message", (data) => {
+    onMessage(socket, data);
+  });
 });
 
 function initialConnection(socket) {
-  // each user have a default nickname
-  USERS_INFO[socket.id] = "guess_" + guessNumber;
+  // each user have will have some default information
+  USERS_INFO[socket.id] = { nickname: "guess_" + guessNumber };
+  USERS_INFO[socket.id].currentRoom = "lobby";
+  USERS_INFO[socket.id].numberOfRoomsCreated = 0;
   guessNumber++;
   // and by default all users join to the lobby
   socket.join("lobby");
   ROOMS_INFO["lobby"]++;
-  // emit event to update the home page
+  // emit event to update the home page with the new information
   socket.emit(
     "joinedGroup",
-    JSON.stringify({ room: "lobby", users: ROOMS_INFO["lobby"] })
+    JSON.stringify({
+      nickname: USERS_INFO[socket.id].nickname,
+      room: "lobby",
+      users: ROOMS_INFO["lobby"],
+    })
   );
+}
+
+function onMessage(socket, data) {
+  let { message } = JSON.parse(data);
+  let { currentRoom, nickname } = USERS_INFO[socket.id];
+  socket
+    .to(currentRoom)
+    .emit("send-message", JSON.stringify({ author: nickname, message }));
 }
 
 server.listen(3000, () => {

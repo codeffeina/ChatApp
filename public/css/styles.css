@@ -74,7 +74,8 @@ body {
 
 .chat .msg {
   display: block;
-  width: 80%;
+  max-width: 80%;
+  width: auto;
   /* margin-left: auto; */
   list-style: none;
   background-color: #ededed;
