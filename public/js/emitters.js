@@ -33,7 +33,8 @@ function sendMessage() {
       socket.emit("createRoom", JSON.stringify({ room }));
       break;
     case "/leaveroom":
-      // TODO: implement the logic to create a new room
+      let inRoom = document.getElementsByClassName("group-name")[0].innerHTML;
+      socket.emit("leaveRoom", JSON.stringify({ room: inRoom }));
       break;
     default: // logic to send messages to users in the same room
       addMessage(message);

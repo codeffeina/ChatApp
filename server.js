@@ -39,6 +39,10 @@ io.on("connection", function (socket) {
     onJoinRoom(socket, data);
   });
 
+  socket.on("leaveRoom", (data) => {
+    onLeaveRoom(socket, data);
+  });
+
   socket.on("newNickname", (data) => {
     onNewNickname(socket, data);
   });
@@ -54,7 +58,7 @@ function initialConnection(socket) {
   socket.join("lobby");
   ROOMS_INFO["lobby"]++;
   // emit event to update the home page with the new information
-  socket.emit(
+  io.to("lobby").emit(
     "joinedRoom",
     JSON.stringify({
       nickname: USERS_INFO[socket.id].nickname,
@@ -104,10 +108,11 @@ function onJoinRoom(socket, data) {
   }
 
   // first let's update the number of user in the current room
-  let usersConnected = --ROOMS_INFO[USERS_INFO[socket.id].currentRoom];
-  socket // emit event to inform the update
-    .to(USERS_INFO[socket.id].currentRoom)
-    .emit("leavedRoom", JSON.stringify({ users: usersConnected }));
+  updateUsersConnected(socket);
+  // let usersConnected = --ROOMS_INFO[USERS_INFO[socket.id].currentRoom];
+  // socket // emit event to inform the update
+  //   .to(USERS_INFO[socket.id].currentRoom)
+  //   .emit("leavedRoom", JSON.stringify({ users: usersConnected }));
 
   // join the new room
   socket.join(room);
@@ -133,9 +138,34 @@ function onNewNickname(socket, data) {
   NICKNAMES.splice(index, 1);
   NICKNAMES.push(nickname);
   USERS_INFO[socket.id].nickname = nickname;
-  socket
+  io.to(USERS_INFO[socket.id].currentRoom).emit(
+    "newNickname",
+    JSON.stringify({ nickname, oldNickname })
+  );
+}
+
+function onLeaveRoom(socket, data) {
+  let { room } = JSON.parse(data);
+  if (room === "lobby") return;
+  socket.leave(room);
+  updateUsersConnected(socket);
+  room = "lobby";
+  // join the new room
+  socket.join(room);
+  // update the number of users in this room
+  let users = ++ROOMS_INFO[room];
+  // let { nickname } = USERS_INFO[socket.id];
+  // update the new room for this users
+  USERS_INFO[socket.id].currentRoom = room;
+  io.to(room).emit("joinedRoom", JSON.stringify({ room, users }));
+}
+
+function updateUsersConnected(socket) {
+  socket.leave(USERS_INFO[socket.id].currentRoom);
+  let usersConnected = --ROOMS_INFO[USERS_INFO[socket.id].currentRoom];
+  socket // emit event to inform the update
     .to(USERS_INFO[socket.id].currentRoom)
-    .emit("newNickname", JSON.stringify({ nickname, oldNickname }));
+    .emit("leavedRoom", JSON.stringify({ users: usersConnected }));
 }
 
 server.listen(3000, () => {

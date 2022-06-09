@@ -8,7 +8,7 @@ socket.on("joinedRoom", function (data) {
   data = JSON.parse(data);
   document.getElementsByClassName("group-name")[0].innerHTML = data.room;
   document.getElementById("usersIn").innerText = data.users;
-  nickname = nickname ? data.nickname : nickname; //TODO: remove this variable
+  // nickname = nickname ? data.nickname : nickname; //TODO: remove this variable
   console.log("Joined room", data.room);
 });
 
@@ -23,14 +23,14 @@ socket.on("send-message", function (data) {
   console.log(chatElement.scrollHeight);
   let li = document.createElement("li");
   li.classList.add("msg");
-  li.innerHTML = `<span class="author">${data.author}</span>: ${data.message}`;
+  li.innerHTML = `<span class="author">${data.author}</span> ${data.message}`;
   chatElement.appendChild(li);
   chatElement.scrollTo(0, chatElement.scrollHeight);
 });
 
 socket.on("roomCreated", function (data) {
   let { room } = JSON.parse(data);
-  alert("new room created", room);
+  alert("new room created: " + room);
 });
 
 socket.on("newNickname", function (data) {

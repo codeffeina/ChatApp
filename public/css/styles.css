@@ -83,6 +83,10 @@ body {
   margin-bottom: 10px;
 }
 
+.msg .author {
+  color: darkcyan;
+}
+
 .send-message {
   height: 5%;
   border-top: 1px solid gray;
