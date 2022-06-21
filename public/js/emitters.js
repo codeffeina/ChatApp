@@ -7,6 +7,7 @@ function sendMessage() {
   let initial_piece = message.split(" ")[0];
   switch (initial_piece) {
     case "/nickname":
+    case "/nn":
       nickname = cleanSpaces(message.split(" ")[1]);
       if (nickname.length == 0) {
         alert("Provide a nickname");
@@ -15,6 +16,7 @@ function sendMessage() {
       socket.emit("newNickname", JSON.stringify({ nickname }));
       break;
     case "/joinroom":
+    case "/jr":
       let roomToJoin = message.split(" ")[1];
       roomToJoin = cleanSpaces(roomToJoin);
       if (roomToJoin.length === 0) {
@@ -24,6 +26,7 @@ function sendMessage() {
       socket.emit("joinRoom", JSON.stringify({ room: roomToJoin }));
       break;
     case "/createroom":
+    case "/cr":
       let room = message.split(" ")[1];
       room = cleanSpaces(room);
       if (room.length === 0) {
@@ -33,6 +36,7 @@ function sendMessage() {
       socket.emit("createRoom", JSON.stringify({ room }));
       break;
     case "/leaveroom":
+    case "/lr":
       let inRoom = document.getElementsByClassName("group-name")[0].innerHTML;
       socket.emit("leaveRoom", JSON.stringify({ room: inRoom }));
       break;
